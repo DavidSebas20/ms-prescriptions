@@ -47,9 +47,9 @@ jobs:
 
       - name: Copy microservice to domain repository
         run: |
-          rm -rf domain_repo/ms-exams
-          mkdir -p domain_repo/ms-exams
-          rsync -av --exclude='.git' --exclude='domain_repo' . domain_repo/ms-exams/ 
+          rm -rf domain_repo/ms-prescriptions
+          mkdir -p domain_repo/ms-prescriptions
+          rsync -av --exclude='.git' --exclude='domain_repo' . domain_repo/ms-prescriptions/ 
 
       - name: Commit and push changes
         run: |
