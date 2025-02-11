@@ -1,24 +1,41 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const connectDB = require('./utils/database');
+const typeDefs = require('./graphql/schema/prescription.schema');
+const resolvers = require('./graphql/resolvers/prescription.resolver');
 
+// Initialize the server
 const startServer = async () => {
   const app = express();
 
   // Connect to MongoDB
-  mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+  await connectDB();
+
+  // Create Apollo Server instance
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
   });
 
-  mongoose.connection.once('open', () => {
-      console.log('Connected to database');
-  });
+  // Start Apollo Server
+  await server.start();
 
-  // Initialize server
-  const PORT = process.env.PORT || 3000;
+  // Apply Apollo Server middleware to Express
+  app.use(
+    '/graphql',
+    cors(), // Enable CORS
+    bodyParser.json(), // Parse JSON requests
+    expressMiddleware(server)
+  );
+
+  // Start the Express server
+  const PORT = process.env.PORT || 4000;
   app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}/graphql`);
   });
 };
 

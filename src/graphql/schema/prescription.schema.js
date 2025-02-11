@@ -1,11 +1,11 @@
-const { gql } = require('apollo-server-express');
+const gql = require('graphql-tag');
 
 // Define the GraphQL schema for prescriptions
 module.exports = gql`
   type Prescription {
     prescription_id: String!
-    patient_id: String!       
-    doctor_id: String!        
+    patient_id: String!
+    doctor_id: String!
     medication: String!
     dosage: String!
     date_prescribed: String!
@@ -15,14 +15,14 @@ module.exports = gql`
   type Query {
     getPrescription(prescription_id: String!): Prescription
     listPrescriptions: [Prescription]
-    searchPrescriptions(patient_id: String, doctor_id: String, medication: String): [Prescription] 
+    searchPrescriptions(patient_id: String, doctor_id: String, medication: String): [Prescription]
   }
 
   type Mutation {
     addPrescription(
       prescription_id: String!
-      patient_id: String!      
-      doctor_id: String!       
+      patient_id: String!
+      doctor_id: String!
       medication: String!
       dosage: String!
       notes: String
@@ -30,8 +30,8 @@ module.exports = gql`
 
     updatePrescription(
       prescription_id: String!
-      patient_id: String       
-      doctor_id: String        
+      patient_id: String
+      doctor_id: String
       medication: String
       dosage: String
       notes: String
